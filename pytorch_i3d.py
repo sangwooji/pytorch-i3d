@@ -320,11 +320,15 @@ class InceptionI3d(nn.Module):
             self.add_module(k, self.end_points[k])
         
     def forward(self, x):
+#         print (x.shape)
         for end_point in self.VALID_ENDPOINTS:
             if end_point in self.end_points:
                 x = self._modules[end_point](x) # use _modules to work with dataparallel
+#                 print (x.shape)
 
+#         print (x.shape)
         x = self.logits(self.dropout(self.avg_pool(x)))
+#         print (x.shape)
         if self._spatial_squeeze:
             logits = x.squeeze(3).squeeze(3)
         # logits is batch X time X classes, which is what we want to work with
